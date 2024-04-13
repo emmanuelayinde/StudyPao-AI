@@ -7,10 +7,10 @@ interface authData {
   token: string;
 }
 
-interface userData {
-  firstName: string;
-  lastName: string;
-}
+// interface userData {
+//   firstName: string;
+//   lastName: string;
+// }
 
 export function tokenInterceptors() {
   api.interceptors.request.use(

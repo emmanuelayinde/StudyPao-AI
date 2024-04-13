@@ -1,4 +1,3 @@
-import React from 'react'
 import Signin from '../Components/Login/signin'
 import Nav from '../Components/LandingPage/nav'
 
