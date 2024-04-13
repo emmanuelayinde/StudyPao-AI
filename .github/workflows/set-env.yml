@@ -1,0 +1,82 @@
+name: Action to set environments
+
+on:
+  workflow_dispatch:
+    inputs:
+        deploy-env:
+          type: choice
+          description: Select the environment
+          options:
+          - PROD
+          - DEV
+          required: true
+        
+        env-name:
+          type: string
+        
+        envValue:
+          type: string
+
+jobs:
+    set-deploy-env-dev:
+      if: ${{ inputs.deploy-env == 'DEV' }}
+      runs-on: ubuntu-latest
+
+      steps:
+          - uses: actions/checkout@v1
+
+          - name: intsall heroku cli
+            run: |
+              curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+
+          - name: create the authetication
+            run: |
+              cat <<EOT >> ~/.netrc
+              machine api.heroku.com
+                login ${{ secrets.HEROKU_API_EMAIL }}
+                password ${{ secrets.HEROKU_API_KEY }}
+              machine git.heroku.com
+                login ${{ secrets.HEROKU_API_EMAIL }}
+                password ${{ secrets.HEROKU_API_KEY }}
+              EOT
+          
+          - name: Mask environment variable
+            run: |
+              ENV_VALUE=$(jq -r '.inputs.envValue' $GITHUB_EVENT_PATH)
+              echo ::add-mask::$ENV_VALUE
+              echo ENV_VALUE=$ENV_VALUE >> $GITHUB_ENV
+          
+          - name: set config
+            run: heroku config:set ${{ inputs.env-name }}=${{ env.ENV_VALUE }} -a ${{ secrets.HEROKU_APP_DEV_NAME }}
+
+    set-deploy-env-prod:
+        runs-on: ubuntu-latest
+        if: ${{ inputs.deploy-env == 'PROD' }}
+
+        steps:
+            - uses: actions/checkout@v1
+
+            - name: intsall heroku cli
+              run: |
+               curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+
+            - name: create the authetication
+              run: |
+                cat <<EOT >> ~/.netrc
+                machine api.heroku.com
+                  login ${{ secrets.HEROKU_API_EMAIL_PROD }}
+                  password ${{ secrets.secrets.HEROKU_API_KEY_PROD }}
+                machine git.heroku.com
+                  login ${{ secrets.HEROKU_API_EMAIL_PROD }}
+                  password ${{ secrets.secrets.HEROKU_API_KEY_PROD}}
+                EOT
+            
+            - name: Mask environment variable
+              run: |
+                ENV_VALUE=$(jq -r '.inputs.envValue' $GITHUB_EVENT_PATH)
+                echo ::add-mask::$ENV_VALUE
+                echo ENV_VALUE=$ENV_VALUE >> $GITHUB_ENV
+            
+            - name: set config
+              run: heroku config:set ${{ inputs.env-name }}=${{ env.ENV_VALUE }} -a ${{ secrets.HEROKU_APP_PROD_NAME }}
+              

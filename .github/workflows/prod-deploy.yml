@@ -1,0 +1,36 @@
+name: Deploy to prod env
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: set all env vars from env
+        env:
+          all_vars: ${{ toJson(vars) }}
+        run: echo "$all_vars"
+
+  deploy:
+    if: false
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: step1
+        run: echo "=====Deployment to heroku started======="
+
+      - name: Push to heroku
+        run: git push -f https://heroku:${{ secrets.HEROKU_API_KEY_PROD }}@git.heroku.com/getinadash-frontend-prod.git origin/main:main
+
+
+
+  
