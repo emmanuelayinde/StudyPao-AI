@@ -1,10 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { useSignin } from "../../api/hooks";
 import { useState, useEffect } from "react";
 
 const Signin = () => {
   const [googleToken, setGoogleToken] = useState<string>("");
+  const [userExistError, setUserExistError] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const { mutateAsync } = useSignin();
 
@@ -15,12 +18,14 @@ const Signin = () => {
     })
       .then((res) => {
         if (res) {
-          alert("Good to Go");
+          navigate("/dashboard");
         }
       })
       .catch((e) => {
         console.log(e);
-        alert("Big Fat Error");
+        if (e.response.status === 400) {
+          setUserExistError(true);
+        }
       });
   };
 
@@ -32,6 +37,11 @@ const Signin = () => {
 
   return (
     <div className="my-10 ">
+      {userExistError && (
+        <div className="bg-[#F76F6F] px-4 py-3 rounded-lg absolute top-[50px] left-[30px]">
+          <span className="text-white">This user don't exist </span>
+        </div>
+      )}
       <h1 className="text-3xl font-bold text-center">Welcome Back</h1>
 
       {/* <div className="w-full md:w-96 border border-[#dedddd] mx-auto rounded-md my-8 px-5 py-4 shadow-md">

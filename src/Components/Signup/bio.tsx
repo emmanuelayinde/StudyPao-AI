@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
-import { getUserName, getUserLevel, getUserCollege } from "../../../api";
+import {
+  getUserName,
+  getUserLevel,
+  getUserCollege,
+  getProfile,
+} from "../../../api";
 import { authTokenStore } from "../../store";
+import { useNavigate } from "react-router-dom";
 
 interface College {
   name: string;
@@ -20,8 +26,12 @@ const Bio = () => {
   const [authError, setAuthError] = useState(false);
 
   const token = authTokenStore((state) => state.token);
+  const navigate = useNavigate()
 
   const handleClick = () => {
+    if (getCollege) {
+      getUserProfile();
+    }
     if (!getCollege) {
       setAuthError(true);
     }
@@ -59,6 +69,34 @@ const Bio = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const getUserProfile = async (): Promise<void> => {
+    try {
+      const res = await fetch(`${getProfile}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: userInfo.firstName,
+          lastName: userInfo.lastName,
+          level: getCurrLevel,
+          universityName: getCollege,
+        }),
+      });
+
+      if(!res.ok) {
+        alert('Big Fat Error')
+      } else {
+        alert('Good to go')
+        navigate("/dashboard")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
   };
 
   useEffect(() => {
@@ -122,7 +160,11 @@ const Bio = () => {
                 value={getCollege}
                 onChange={(e) => setGetCollege(e.target.value)}
               />
-              {authError && <span className="text-sm text-[#F76F6F]">Thid field is required</span>}
+              {authError && (
+                <span className="text-sm text-[#F76F6F]">
+                  Thid field is required
+                </span>
+              )}
 
               <div className="absolute bg-white shadow-md px-3 rounded-md">
                 {getCollegeArray
@@ -139,7 +181,7 @@ const Bio = () => {
                   .map((item) => {
                     const { name, code } = item;
                     return (
-                      <div key={code}>
+                      <div key={name}>
                         <ul>
                           <li
                             onClick={() => setGetCollege(name)}

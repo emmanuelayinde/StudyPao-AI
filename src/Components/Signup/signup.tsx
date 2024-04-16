@@ -3,6 +3,7 @@ import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { useState, useEffect } from "react";
 import { useSignup } from "../../api/hooks";
 import { authTokenStore } from "../../store";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Signup = ({
   setStep,
@@ -16,24 +17,27 @@ const Signup = ({
   setStep: (step: { stepOne?: boolean; stepTwo?: boolean }) => void;
 }) => {
   const [googleToken, setGoogleToken] = useState<string>("");
+  const [userExistError, setUserExistError] = useState<boolean>(false);
 
-  const {mutateAsync} = useSignup()
+  const { mutateAsync } = useSignup();
 
   const queryGoogleAuth = async () => {
     mutateAsync({
       token: googleToken,
-      authenticationType: "google"
+      authenticationType: "google",
     })
-    .then((res) => {
-      if(res) {
-        setStep({stepTwo: true})
-        authTokenStore.setState({token: res.token})
-      }
-    })
-    .catch((e) => {
-        console.log(e)
-        alert('Big Fat Error')
-    })
+      .then((res) => {
+        if (res) {
+          setStep({ stepTwo: true });
+          authTokenStore.setState({ token: res.token });
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        if (e.response.status === 400) {
+          setUserExistError(true);
+        }
+      });
   };
 
   useEffect(() => {
@@ -42,8 +46,43 @@ const Signup = ({
     }
   }, [googleToken]);
 
+  useEffect(() => {
+    if (userExistError) {
+      setTimeout(() => {
+        setUserExistError(false);
+      }, 3000);
+    }
+  });
+
+  const errorVariant = {
+    hidden: {
+      x: "-100vw",
+    },
+    visible: {
+      x: 0,
+      transition: { duration: 0.5 },
+    },
+    close: {
+      x: "-100vw",
+      transition: { duration: 0.5 },
+    },
+  };
+
   return (
     <div className="my-10 overflow-hidden">
+      <AnimatePresence>
+        {userExistError && (
+          <motion.div
+            className="bg-[#F76F6F] px-4 py-3 rounded-lg absolute top-[80px] md:top-[90px] left-[10px] md:left-[30px]"
+            variants={errorVariant}
+            animate="visible"
+            initial="hidden"
+            exit="close"
+          >
+            <span className="text-white">This user exist already </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <h1 className="text-3xl font-bold text-center">Sign Up</h1>
 
       {/* <div className="w-full md:w-96 border border-[#dedddd] mx-auto rounded-md my-8 px-5 py-4 shadow-md">
@@ -120,7 +159,7 @@ const Signup = ({
               setGoogleToken(credentialResponse.credential || "");
             }}
             onError={() => {
-              console.log("Login Failed")
+              console.log("Login Failed");
             }}
           />
         </GoogleOAuthProvider>

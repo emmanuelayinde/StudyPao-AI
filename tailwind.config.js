@@ -25,7 +25,11 @@ export default {
       orange: "#EF9F01",
       lightOrange: '#FFF6E6'
     },
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'board-bg' : "url('/Images/bgBoard.AVIF')"
+      }
+    },
   },
   plugins: [],
 };

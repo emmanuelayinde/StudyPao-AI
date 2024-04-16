@@ -58,10 +58,11 @@ const Hero = () => {
             <div className="text-left bg-lightOrange text-orange w-52 px-2 py-1 rounded-md absolute top-20 right-0 md:-right-[10px] shadow-inner">
               <span>Generate Intereactive Quizzes like: </span>
               <ul className="list-disc mx-8">
-                <li>Quizes</li>
+                <li>True or False</li>
                 <li>Flash Cards</li>
                 <li>MCQs</li>
                 <li>Essays</li>
+                <li>Fill in the Gap</li>
               </ul>
             </div>
           </div>
