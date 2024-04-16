@@ -179,7 +179,7 @@ const Bio = () => {
                     );
                   })
                   .map((item) => {
-                    const { name, code } = item;
+                    const { name } = item;
                     return (
                       <div key={name}>
                         <ul>
