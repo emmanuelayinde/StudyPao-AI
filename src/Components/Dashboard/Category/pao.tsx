@@ -21,7 +21,7 @@ const Pao = () => {
 
   return (
     <div>
-      <div className="px-5 h-[100vh]">
+      <div className="px-5 h-screen" id="board">
         <div className="text-center">
           <span className="text-sm text-[#908E89]">
             Assembly Language and Python programming &gt;{" "}
@@ -62,7 +62,7 @@ const Pao = () => {
             )}
           </div>
 
-          <div className="absolute bottom-0 ">
+          <div className="fixed bottom-0 ">
             <div className="flex items-center gap-4 py-5 bg-white">
               <div>
                 <span className=" text-white bg-black px-2 py-2 rounded-[50%] font-bold">
