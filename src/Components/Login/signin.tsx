@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { useSignin } from "../../api/hooks";
 import { useState, useEffect } from "react";
+import { authTokenStore } from "../../store";
 
 const Signin = () => {
   const [googleToken, setGoogleToken] = useState<string>("");
@@ -18,6 +19,7 @@ const Signin = () => {
     })
       .then((res) => {
         if (res) {
+          authTokenStore.setState({firstName: res.firstName})
           navigate("/dashboard");
         }
       })
