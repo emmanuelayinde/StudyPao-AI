@@ -23,56 +23,66 @@ const Sidebar = () => {
     },
     close: {
       x: "100vw",
-      transition: { duration: 1.5 },
+      transition: { duration: 0.5 },
     },
   };
 
   return (
     <div>
       <div>
-        {showSideBar && (
-          <div className="bg-black/30 w-full h-full fixed">
-            <div className="bg-white fixed right-0 w-[300px] px-4 py-4 h-full">
-              <div className="flex items-center justify-between py-0">
-                <FontAwesomeIcon
-                  icon={faXmark}
-                  className="text-2xl cursor-pointer"
-                  onClick={() => setShowSideBar(false)}
-                />
-                <span className=" text-white bg-black px-2 py-2 rounded-[50%] font-bold">
-                  AO
-                </span>
-              </div>
-
-              <div className="my-7">
-                <button className="bg-orange px-4 py-2 text-white rounded-lg text-sm font-semibold">
-                  Start New Study
-                </button>
-              </div>
-
-              {/* Category */}
-              <div>
-                <h4 className="text-sm text-[#999F99]">My Study Categories</h4>
-
-                <button className="text-green text-sm font-semibold flex items-center gap-2 my-3">
-                  <FontAwesomeIcon icon={faPlusCircle} />
-                  <span>Create New Category</span>
-                </button>
-              </div>
-
-              {/* Sidebar Footer */}
-              <div className="absolute bottom-8 w-full left-0">
-                <button className="bg-black px-4 py-2 text-white rounded-lg text-sm font-semibold mx-4">
-                  Upgrade Plan
-                </button>
-
-                <div className="text-right mt-12 px-4">
-                  <span className="">Help</span>
+        <AnimatePresence>
+          {showSideBar && (
+            <div className="bg-black/30 w-full h-full fixed">
+              <motion.div
+                className="bg-white fixed right-0 w-[300px] px-4 py-4 h-full"
+                variants={collapseVariant}
+                animate="visible"
+                initial="hidden"
+                exit="close"
+              >
+                <div className="flex items-center justify-between py-0">
+                  <FontAwesomeIcon
+                    icon={faXmark}
+                    className="text-2xl cursor-pointer"
+                    onClick={() => setShowSideBar(false)}
+                  />
+                  <span className=" text-white bg-black px-2 py-2 rounded-[50%] font-bold">
+                    AO
+                  </span>
                 </div>
-              </div>
+
+                <div className="my-7">
+                  <button className="bg-orange px-4 py-2 text-white rounded-lg text-sm font-semibold">
+                    Start New Study
+                  </button>
+                </div>
+
+                {/* Category */}
+                <div>
+                  <h4 className="text-sm text-[#999F99]">
+                    My Study Categories
+                  </h4>
+
+                  <button className="text-green text-sm font-semibold flex items-center gap-2 my-3">
+                    <FontAwesomeIcon icon={faPlusCircle} />
+                    <span>Create New Category</span>
+                  </button>
+                </div>
+
+                {/* Sidebar Footer */}
+                <div className="absolute bottom-8 w-full left-0">
+                  <button className="bg-black px-4 py-2 text-white rounded-lg text-sm font-semibold mx-4">
+                    Upgrade Plan
+                  </button>
+
+                  <div className="text-right mt-12 px-4">
+                    <span className="">Help</span>
+                  </div>
+                </div>
+              </motion.div>
             </div>
-          </div>
-        )}
+          )}
+        </AnimatePresence>
       </div>
       <div
         className={`${

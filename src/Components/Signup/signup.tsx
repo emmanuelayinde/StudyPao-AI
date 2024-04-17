@@ -29,7 +29,7 @@ const Signup = ({
       .then((res) => {
         if (res) {
           setStep({ stepTwo: true });
-          authTokenStore.setState({ token: res.token });
+          authTokenStore.setState({ token: res.token, firstName: res.firstName });
         }
       })
       .catch((e) => {

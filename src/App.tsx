@@ -6,6 +6,8 @@ import Register from './pages/register'
 import Index from './pages/Board'
 import BoardHome from './pages/Board/boardHome'
 import FileUploadScreen from './pages/Board/fileUploadScreen'
+import Category from './pages/Board/Category/category'
+import Ai from './pages/Board/Category/ai'
 
 function App() {
 
@@ -33,6 +35,14 @@ function App() {
         {
           path: "upload-file",
           element: <FileUploadScreen />
+        },
+        {
+          path: "category",
+          element: <Category />
+        },
+        {
+          path: "category/pao",
+          element: <Ai />
         }
       ]
     }

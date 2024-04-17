@@ -1,5 +1,6 @@
 import { create } from "zustand";
 
 export const authTokenStore = create(() => ({
-    token: ''
+    token: '',
+    firstName: ''
 }))

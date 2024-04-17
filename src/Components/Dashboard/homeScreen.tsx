@@ -1,13 +1,17 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { authTokenStore } from "../../store";
 
 const HomeScreen = () => {
+
+  const firstName = authTokenStore((state) => state.firstName)
+
   return (
-    <div>
+    <div className="">
       <div className="py-[100px] px-5 h-[100vh]">
         <h1 className="text-4xl text-green font-bold md:w-[550px] w-full md:mx-auto  ">
-          Welcome, Mikun
+          Welcome, {firstName}
         </h1>
         <p className="md:w-[550px] w-full   md:mx-auto py-4">
           Being your StuddyBuddie, my job is to help you power through your
@@ -27,15 +31,17 @@ const HomeScreen = () => {
             </div>
           </Link>
 
-          <div className="text-center bg-[#C8FDC8] md:w-[300px] py-16 rounded-2xl border border-[#05B105]">
-            <FontAwesomeIcon
-              icon={faPlus}
-              className="bg-green text-white px-2 py-1 rounded-lg my-5 text-4xl font-bold"
-            />
-            <span className="block w-32 mx-auto font-semibold">
-              Create a New Study Category
-            </span>
-          </div>
+          <Link to="category">
+            <div className="text-center bg-[#C8FDC8] md:w-[300px] py-16 rounded-2xl border border-[#05B105]">
+              <FontAwesomeIcon
+                icon={faPlus}
+                className="bg-green text-white px-2 py-1 rounded-lg my-5 text-4xl font-bold"
+              />
+              <span className="block w-32 mx-auto font-semibold">
+                Create a New Study Category
+              </span>
+            </div>
+          </Link>
         </div>
       </div>
     </div>
