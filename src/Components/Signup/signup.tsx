@@ -18,21 +18,28 @@ const Signup = ({
 }) => {
   const [googleToken, setGoogleToken] = useState<string>("");
   const [userExistError, setUserExistError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { mutateAsync } = useSignup();
 
   const queryGoogleAuth = async () => {
+    setIsLoading(true);
     mutateAsync({
       token: googleToken,
       authenticationType: "google",
     })
       .then((res) => {
+        setIsLoading(false);
         if (res) {
           setStep({ stepTwo: true });
-          authTokenStore.setState({ token: res.token, firstName: res.firstName });
+          authTokenStore.setState({
+            token: res.token,
+            firstName: res.firstName,
+          });
         }
       })
       .catch((e) => {
+        setIsLoading(false);
         console.log(e);
         if (e.response.status === 400) {
           setUserExistError(true);
@@ -70,6 +77,14 @@ const Signup = ({
 
   return (
     <div className="my-10 overflow-hidden">
+      {isLoading && (
+        <div className="h-full w-full fixed top-0 z-[1000] bg-black/30">
+          <div className="text-center my-[200px]">
+            <div className="loading-spinner"></div>
+          </div>
+        </div>
+      )}
+
       <AnimatePresence>
         {userExistError && (
           <motion.div

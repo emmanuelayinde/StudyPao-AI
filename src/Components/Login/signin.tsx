@@ -7,23 +7,27 @@ import { authTokenStore } from "../../store";
 const Signin = () => {
   const [googleToken, setGoogleToken] = useState<string>("");
   const [userExistError, setUserExistError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const navigate = useNavigate();
 
   const { mutateAsync } = useSignin();
 
   const queryGoogleAuth = async () => {
+    setIsLoading(true)
     mutateAsync({
       token: googleToken,
       authenticationType: "google",
     })
       .then((res) => {
         if (res) {
+          setIsLoading(false)
           authTokenStore.setState({firstName: res.firstName})
           navigate("/dashboard");
         }
       })
       .catch((e) => {
+        setIsLoading(false)
         console.log(e);
         if (e.response.status === 400) {
           setUserExistError(true);
@@ -39,6 +43,14 @@ const Signin = () => {
 
   return (
     <div className="my-10 ">
+      {isLoading && (
+        <div className="h-full w-full fixed top-0 z-[1000] bg-black/30">
+          <div className="text-center my-[200px]">
+            <div className="loading-spinner"></div>
+          </div>
+        </div>
+      )}
+
       {userExistError && (
         <div className="bg-[#F76F6F] px-4 py-3 rounded-lg absolute top-[50px] left-[30px]">
           <span className="text-white">This user don't exist </span>

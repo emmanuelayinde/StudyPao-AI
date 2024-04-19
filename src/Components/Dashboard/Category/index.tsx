@@ -36,18 +36,20 @@ const Index = () => {
             </div>
           </Link>
 
-          <div className="bg-[#FFE5B3] border border-[#FEAA05] w-full md:w-[300px] md:h-[240px] py-10 px-10 rounded-2xl text-center">
-            <FontAwesomeIcon
-              icon={faCircleQuestion}
-              className="text-[#FEAA05] text-2xl"
-            />
-            <span className="block text-lg py-2 font-bold">
-              Generate Quizzes
-            </span>
-            <p className="text-[#7A715C] text-md">
-              Test your knowledge and practice what you've learnt
-            </p>
-          </div>
+          <Link to="quizz">
+            <div className="bg-[#FFE5B3] border border-[#FEAA05] w-full md:w-[300px] md:h-[240px] py-10 px-10 rounded-2xl text-center">
+              <FontAwesomeIcon
+                icon={faCircleQuestion}
+                className="text-[#FEAA05] text-2xl"
+              />
+              <span className="block text-lg py-2 font-bold">
+                Generate Quizzes
+              </span>
+              <p className="text-[#7A715C] text-md">
+                Test your knowledge and practice what you've learnt
+              </p>
+            </div>
+          </Link>
         </div>
       </div>
     </div>

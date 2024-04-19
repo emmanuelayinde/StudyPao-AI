@@ -2,23 +2,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { faFilePdf } from "@fortawesome/free-regular-svg-icons";
 import { useState, ChangeEvent } from "react";
+import { Link } from "react-router-dom";
+import { fileStore } from "../../store";
 
 const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+    console.log(files)
     if (files && files.length > 0) {
       setSelectedFile(files[0]);
+      fileStore.setState({file: files[0]})
     }
   };
-
-  console.log(selectedFile);
 
   return (
     <div>
       <div className="py-[100px] px-5 h-[100vh]">
-        <h1 className="text-4xl font-bold md:w-[550px] md:mx-auto">Upload File</h1>
+        <h1 className="text-4xl font-bold md:w-[550px] md:mx-auto">
+          Upload File
+        </h1>
 
         <div className="my-10 md:w-[550px] bg-[#FFE5B3] mx-auto border border-[#FEAA05] py-14 rounded-xl text-center">
           <label htmlFor="upload">
@@ -40,12 +44,25 @@ const FileUpload = () => {
 
         <div className="my-6">
           {selectedFile && (
-            <div className="bg-white flex items-center px-4 py-5 rounded-lg gap-5 md:w-[550px] mx-auto shadow-md">
-              <FontAwesomeIcon icon={faFilePdf} className="" />
-              <p>{selectedFile.name}</p>
+            <div>
+              <div className="bg-white flex items-center px-4 py-5 rounded-lg gap-5 md:w-[550px] mx-auto shadow-md">
+                <FontAwesomeIcon icon={faFilePdf} className="" />
+                <p>{selectedFile.name}</p>
+              </div>
+              <div className="md:w-[550px] mx-auto">
+                <Link to="/dashboard/category">
+                  <button className="my-5 text-white bg-orange rounded-lg w-[180px] py-2">
+                    Continue
+                  </button>
+                </Link>
+              </div>
             </div>
           )}
         </div>
+
+        {/* <div className="w-[550px] mx-auto">
+          <Link to='/dashboard/category'><button className="my-5 text-white bg-orange rounded-lg w-[180px] py-2">Continue</button></Link>
+        </div> */}
       </div>
     </div>
   );

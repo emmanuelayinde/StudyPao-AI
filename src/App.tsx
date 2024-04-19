@@ -1,58 +1,72 @@
-import './App.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Home from './pages/home'
-import Login from './pages/login'
-import Register from './pages/register'
-import Index from './pages/Board'
-import BoardHome from './pages/Board/boardHome'
-import FileUploadScreen from './pages/Board/fileUploadScreen'
-import Category from './pages/Board/Category/category'
-import Ai from './pages/Board/Category/ai'
+import "./App.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "./pages/home";
+import Login from "./pages/login";
+import Register from "./pages/register";
+import Index from "./pages/Board";
+import BoardHome from "./pages/Board/boardHome";
+import FileUploadScreen from "./pages/Board/fileUploadScreen";
+import Category from "./pages/Board/Category/category";
+import Ai from "./pages/Board/Category/ai";
+import ProtectedRoute from "./utils/protectedRoute";
+import Quizz from "./pages/Board/Quizz/quizz";
+import PdfPreview from "./pages/Board/Quizz/pdfPreview";
 
 function App() {
-
   const router = createBrowserRouter([
     {
-      path: '/',
+      path: "/",
       element: <Home />,
     },
     {
-      path: '/signin',
-      element: <Login />
-    }, 
-    {
-      path: '/signup',
-      element: <Register />
+      path: "/signin",
+      element: <Login />,
     },
     {
-      path: '/dashboard',
-      element: <Index />,
+      path: "/signup",
+      element: <Register />,
+    },
+    {
+      path: "/dashboard",
+      element: (
+        <ProtectedRoute>
+          <Index />
+        </ProtectedRoute>
+      ),
       children: [
         {
           path: "/dashboard",
-          element: <BoardHome />
+          element: <BoardHome />,
         },
         {
           path: "upload-file",
-          element: <FileUploadScreen />
+          element: <FileUploadScreen />,
         },
         {
           path: "category",
-          element: <Category />
+          element: <Category />,
         },
         {
           path: "category/pao",
-          element: <Ai />
+          element: <Ai />,
+        },
+        {
+          path: "category/quizz",
+          element: <Quizz />,
+        },
+        {
+          path: "category/quizz/preview",
+          element: <PdfPreview />
         }
-      ]
-    }
-  ])
+      ],
+    },
+  ]);
 
   return (
     <div>
-        <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
