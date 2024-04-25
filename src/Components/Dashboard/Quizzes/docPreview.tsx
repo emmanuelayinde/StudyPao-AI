@@ -4,21 +4,27 @@ import { fileStore } from "../../../store";
 
 const DocPreview = () => {
   const file = fileStore((state) => state.file);
-  console.log(file)
-//   console.log(file);
+  console.log(file);
+  //   console.log(file);
 
-  const docs = [
-    {
+  let docs: any = [];
+
+  if(file) {
+    docs = [
+      {
         uri: window.URL.createObjectURL(file),
         fileName: file.name,
-    }
-  ]
+      },
+    ];
+  }
   return (
     <div className="px-5 h-screen">
       <div>
         <h1 className="my-6 text-3xl font-bold ">Preview Pdf</h1>
 
-        <DocViewer documents={docs} pluginRenderers={DocViewerRenderers} />
+        {file && (
+          <DocViewer documents={docs} pluginRenderers={DocViewerRenderers} />
+        )}
       </div>
     </div>
   );

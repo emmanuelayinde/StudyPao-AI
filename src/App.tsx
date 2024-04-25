@@ -11,6 +11,9 @@ import Ai from "./pages/Board/Category/ai";
 import ProtectedRoute from "./utils/protectedRoute";
 import Quizz from "./pages/Board/Quizz/quizz";
 import PdfPreview from "./pages/Board/Quizz/pdfPreview";
+import Obj from "./pages/Board/Quizz/obj";
+import Cards from "./pages/Board/Quizz/cards";
+import Theories from "./pages/Board/Quizz/theories";
 
 function App() {
   const router = createBrowserRouter([
@@ -57,6 +60,18 @@ function App() {
         {
           path: "category/quizz/preview",
           element: <PdfPreview />
+        },
+        {
+          path: "category/quizz/mcq",
+          element: <Obj />
+        },
+        {
+          path: "category/quizz/flashcards",
+          element: <Cards />
+        },
+        {
+          path: "category/quizz/theory",
+          element: <Theories />
         }
       ],
     },
