@@ -3,6 +3,7 @@ import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { useSignin } from "../../api/hooks";
 import { useState, useEffect } from "react";
 import { authTokenStore } from "../../store";
+import { setUserDetail } from "../../utils";
 
 const Signin = () => {
   const [googleToken, setGoogleToken] = useState<string>("");
@@ -23,6 +24,7 @@ const Signin = () => {
         if (res) {
           setIsLoading(false)
           authTokenStore.setState({firstName: res.firstName})
+          setUserDetail(res.firstName)
           navigate("/dashboard");
         }
       })

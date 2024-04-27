@@ -14,6 +14,8 @@ import PdfPreview from "./pages/Board/Quizz/pdfPreview";
 import Obj from "./pages/Board/Quizz/obj";
 import Cards from "./pages/Board/Quizz/cards";
 import Theories from "./pages/Board/Quizz/theories";
+import Ftg from "./pages/Board/Quizz/ftg";
+import TOrF from "./pages/Board/Quizz/tOrF";
 
 function App() {
   const router = createBrowserRouter([
@@ -72,6 +74,14 @@ function App() {
         {
           path: "category/quizz/theory",
           element: <Theories />
+        },
+        {
+          path: "category/quizz/fillinthegap",
+          element: <Ftg />
+        },
+        {
+          path: "category/quizz/trueorfalse",
+          element: <TOrF />
         }
       ],
     },

@@ -1,11 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { authTokenStore } from "../../store";
+// import { authTokenStore } from "../../store";
 
 const HomeScreen = () => {
 
-  const firstName = authTokenStore((state) => state.firstName)
+  // const firstName = authTokenStore((state) => state.firstName)
+  const firstName = localStorage.getItem("firstName");
 
   return (
     <div className="">

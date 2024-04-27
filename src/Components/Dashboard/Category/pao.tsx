@@ -2,13 +2,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { FormEvent } from "react";
-import { authTokenStore } from "../../../store";
+// import { authTokenStore } from "../../../store";
 
 const Pao = () => {
   const [prompt, setPrompt] = useState<string>("");
   const [promptArray, setPromptArray] = useState<any>([]);
 
-  const firstName = authTokenStore((state) => state.firstName)
+  const firstName = localStorage.getItem("firstName");
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

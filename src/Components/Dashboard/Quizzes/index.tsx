@@ -22,14 +22,16 @@ const Index = () => {
             </div>
           </Link>
 
-          <div className="bg-white rounded-lg border border-[#E2E4E2] px-5 py-5 text-center">
-            <img
-              src="/Images/questionMark.svg"
-              alt="quiz"
-              className="mx-auto"
-            />
-            <span>Fill in the Gap</span>
-          </div>
+          <Link to="fillinthegap">
+            <div className="bg-white rounded-lg border border-[#E2E4E2] px-5 py-5 text-center">
+              <img
+                src="/Images/questionMark.svg"
+                alt="quiz"
+                className="mx-auto"
+              />
+              <span>Fill in the Gap</span>
+            </div>
+          </Link>
 
           <Link to="mcq">
             <div className="bg-white rounded-lg border border-[#E2E4E2] px-5 py-5 text-center">
@@ -53,14 +55,16 @@ const Index = () => {
             </div>
           </Link>
 
-          <div className="bg-white rounded-lg border border-[#E2E4E2] px-5 py-5 text-center">
-            <img
-              src="/Images/questionMark.svg"
-              alt="quiz"
-              className="mx-auto"
-            />
-            <span>True or False</span>
-          </div>
+          <Link to='trueorfalse'>
+            <div className="bg-white rounded-lg border border-[#E2E4E2] px-5 py-5 text-center">
+              <img
+                src="/Images/questionMark.svg"
+                alt="quiz"
+                className="mx-auto"
+              />
+              <span>True or False</span>
+            </div>   
+          </Link>
         </div>
 
         <div>

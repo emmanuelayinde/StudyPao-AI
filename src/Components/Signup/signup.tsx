@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSignup } from "../../api/hooks";
 import { authTokenStore } from "../../store";
 import { motion, AnimatePresence } from "framer-motion";
+import { setUserDetail } from "../../utils";
 
 const Signup = ({
   setStep,
@@ -36,6 +37,7 @@ const Signup = ({
             token: res.token,
             firstName: res.firstName,
           });
+          setUserDetail(res.firstName)
         }
       })
       .catch((e) => {

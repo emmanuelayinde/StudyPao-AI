@@ -1,19 +1,24 @@
-import { authTokenStore } from "../store"
-import { Navigate } from "react-router-dom"
+// import { authTokenStore } from "../store"
+import { Navigate } from "react-router-dom";
 import { ReactNode } from "react";
+// import { getUserDetail } from ".";
 
 interface Props {
-    children: ReactNode; 
+  children: ReactNode;
 }
 
-const ProtectedRoute = ({children}: Props) => {
+const ProtectedRoute = ({ children }: Props) => {
+  // const name = getUserDetail();
+  // console.log(name)
+  const firstName = localStorage.getItem("firstName");
+//   console.log(firstName);
+//   const sample = '';
+//   const firstName = authTokenStore((state) => state.firstName);
 
-    const firstName = authTokenStore((state) => state.firstName)
+  if (!firstName) {
+    return <Navigate to="/" />;
+  }
+  return children;
+};
 
-    if (!firstName) {
-        return <Navigate to='/' />
-    }
-    return children
-}
-
-export default ProtectedRoute
+export default ProtectedRoute;
