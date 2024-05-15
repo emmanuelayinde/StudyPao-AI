@@ -8,10 +8,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { authTokenStores } from "../../store";
 
 const Sidebar = () => {
   const [collapse, setCollapse] = useState<boolean>(false);
   const [showSideBar, setShowSideBar] = useState<boolean>(false);
+
+  const logo = authTokenStores((state) => state.initials)
 
   const collapseVariant = {
     hidden: {
@@ -47,7 +50,7 @@ const Sidebar = () => {
                     onClick={() => setShowSideBar(false)}
                   />
                   <span className=" text-white bg-black px-2 py-2 rounded-[50%] font-bold">
-                    AO
+                    {logo}
                   </span>
                 </div>
 
@@ -101,7 +104,7 @@ const Sidebar = () => {
             >
               <div>
                 <span className=" text-white bg-black px-2 py-2 rounded-[50%] font-bold">
-                  AO
+                 {logo}
                 </span>
               </div>
 
@@ -124,7 +127,7 @@ const Sidebar = () => {
               >
                 <div className="text-right py-0">
                   <span className=" text-white bg-black px-2 py-2 rounded-[50%] font-bold">
-                    AO
+                    {logo}
                   </span>
                 </div>
 

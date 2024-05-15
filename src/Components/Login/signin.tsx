@@ -2,37 +2,51 @@ import { Link, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { useSignin } from "../../api/hooks";
 import { useState, useEffect } from "react";
-import { authTokenStore } from "../../store";
+import { authTokenStore, planStore, authTokenStores } from "../../store";
 import { setUserDetail } from "../../utils";
+import { motion, AnimatePresence } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleExclamation,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Signin = () => {
   const [googleToken, setGoogleToken] = useState<string>("");
-  const [userExistError, setUserExistError] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [userError, setUserError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
+  // const {firstNames, tokens} = authTokenStores.getState();
+  const setFirstName = authTokenStores.setState;
 
   const { mutateAsync } = useSignin();
 
   const queryGoogleAuth = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     mutateAsync({
       token: googleToken,
       authenticationType: "google",
     })
       .then((res) => {
         if (res) {
-          setIsLoading(false)
-          authTokenStore.setState({firstName: res.firstName})
-          setUserDetail(res.firstName)
+          console.log(res)
+          setIsLoading(false);
+          authTokenStore.setState({
+            firstName: res.firstName,
+            token: res.token,
+          });
+          setFirstName({ firstNames: res.firstName, initials: res.logo });
+          planStore.setState({ plan: res.plan });
+          setUserDetail(res.firstName);
           navigate("/dashboard");
         }
       })
       .catch((e) => {
-        setIsLoading(false)
+        setIsLoading(false);
         console.log(e);
-        if (e.response.status === 400) {
-          setUserExistError(true);
+        if (e.response.status === 401) {
+          setUserError(true);
         }
       });
   };
@@ -42,6 +56,28 @@ const Signin = () => {
       queryGoogleAuth();
     }
   }, [googleToken]);
+
+  useEffect(() => {
+    if (userError) {
+      setTimeout(() => {
+        setUserError(false);
+      }, 3000);
+    }
+  });
+
+  const flyVariant = {
+    hidden: {
+      x: "-100vw",
+    },
+    visible: {
+      x: 0,
+      transition: { duration: 0.5 },
+    },
+    close: {
+      x: "-100vw",
+      transition: { duration: 0.5 },
+    },
+  };
 
   return (
     <div className="my-10 ">
@@ -53,11 +89,28 @@ const Signin = () => {
         </div>
       )}
 
-      {userExistError && (
-        <div className="bg-[#F76F6F] px-4 py-3 rounded-lg absolute top-[50px] left-[30px]">
-          <span className="text-white">This user don't exist </span>
-        </div>
-      )}
+      <AnimatePresence>
+        {userError && (
+          <motion.div
+            className="py-2 px-2 rounded-md bg-white flex items-center justify-between fixed left-[30px] md:left-[50px] border-l-2 border-[#EA4335] w-[200px] shadow-lg"
+            variants={flyVariant}
+            animate="visible"
+            initial="hidden"
+            exit="close"
+          >
+            <div className="flex items-center gap-2">
+              <FontAwesomeIcon
+                icon={faCircleExclamation}
+                className="text-[#EA4335] text-xs"
+              />
+              <span className="text-xs">User does not exist</span>
+            </div>
+            <div>
+              <FontAwesomeIcon icon={faXmark} className="text-xs" />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <h1 className="text-3xl font-bold text-center">Welcome Back</h1>
 
       {/* <div className="w-full md:w-96 border border-[#dedddd] mx-auto rounded-md my-8 px-5 py-4 shadow-md">

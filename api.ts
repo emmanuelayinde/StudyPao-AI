@@ -13,3 +13,4 @@ export const getUserName = `${baseurl}user/profile`
 export const getUserLevel = `${baseurl}user/levels`
 export const getUserCollege = `${baseurl}user/institutions`
 export const getProfile = `${baseurl}user/update-profile`
+export const getUpgradePlan = `${baseurl}user/upgrade-plan/premium`

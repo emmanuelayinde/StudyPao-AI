@@ -70,6 +70,23 @@ export async function signIn(data: authData): Promise<any> {
   return response.data;
 }
 
+export async function premiumPlan(data: any): Promise<any> {
+  const response = await api.post("user/upgrade-plan/premium", data);
+  return response.data;
+}
+
+export async function createCategory(data: any): Promise<any> {
+  tokenInterceptors();
+  const response = await api.post("user/create-category", data);
+  return response.data;
+}
+
+export async function uploadFile(data: any): Promise<any> {
+  tokenInterceptors();
+  const response = await api.post("user/upload", data);
+  return response.data
+}
+
 // export async function userName(data: userData): Promise<any> {
 //   tokenInterceptors();
 //   const response = await api.post("user/profile", data);

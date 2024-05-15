@@ -1,5 +1,5 @@
 import { createMutation } from "react-query-kit";
-import { signUp, signIn } from "..";
+import { signUp, signIn, premiumPlan, createCategory, uploadFile } from "..";
 import { setTokens } from "../../utils";
 
 export const useSignup = createMutation({
@@ -21,6 +21,18 @@ export const useSignin = createMutation({
     });
   },
 });
+
+export const useUpgradePlan = createMutation({
+  mutationFn: premiumPlan
+})
+
+export const useCreateCategory = createMutation({
+  mutationFn: createCategory,
+})
+
+export const useUploadFile = createMutation({
+  mutationFn: uploadFile
+})
 
 // export const getUserInfo = createMutation({
 //     mutationFn: userName,
