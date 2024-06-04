@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { useSignin } from "../../api/hooks";
 import { useState, useEffect } from "react";
-import { authTokenStore, planStore, authTokenStores } from "../../store";
+import { authTokenStore, planStore, useUserInfoStore } from "../../store";
 import { setUserDetail } from "../../utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,7 +18,7 @@ const Signin = () => {
 
   const navigate = useNavigate();
   // const {firstNames, tokens} = authTokenStores.getState();
-  const setFirstName = authTokenStores.setState;
+  const setFirstName = useUserInfoStore.setState;
 
   const { mutateAsync } = useSignin();
 
@@ -30,13 +30,13 @@ const Signin = () => {
     })
       .then((res) => {
         if (res) {
-          console.log(res)
+          // console.log(res)
           setIsLoading(false);
           authTokenStore.setState({
             firstName: res.firstName,
             token: res.token,
           });
-          setFirstName({ firstNames: res.firstName, initials: res.logo });
+          setFirstName({ firstNames: res.firstName, initials: res.logo, tokens: res.token });
           planStore.setState({ plan: res.plan });
           setUserDetail(res.firstName);
           navigate("/dashboard");

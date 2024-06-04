@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getTokens, setTokens, deleteTokens } from "../utils";
-import { basic } from "../../api";
+import { basic, paoBasic } from "../../api";
+import { GetPaoResponseData, GetWelcomeTextData } from "./type";
 
 interface authData {
   authenticationType: string;
@@ -50,6 +51,11 @@ const api = axios.create({
   baseURL: BASE_URL,
 });
 
+const FAST_API = `${paoBasic}`;
+const paoApi = axios.create({
+  baseURL: FAST_API,
+});
+
 export async function getRefreshToken() {
   const tokens = getTokens();
   const response = await api.get("user/refresh-token", {
@@ -84,7 +90,46 @@ export async function createCategory(data: any): Promise<any> {
 export async function uploadFile(data: any): Promise<any> {
   tokenInterceptors();
   const response = await api.post("user/upload", data);
-  return response.data
+  return response.data;
+}
+
+export async function preProcessFile(data: any): Promise<any> {
+  const response = await api.post("user/pre-process-file", data);
+  return response.data;
+}
+
+export async function getChat(data: {
+  file_id: string;
+  user: string;
+}): Promise<any> {
+  const response = await paoApi.post("studdiebuddie-hay-eye/get-chat", data);
+  return response.data;
+}
+
+export async function getWelcomeText(data: {
+  user: string;
+  file_id: string;
+  file_name: string;
+  first_name: string;
+}) {
+  const response = await paoApi.post<GetWelcomeTextData>(
+    "studdiebuddie-hay-eye/generate-welcome-message-and-prompt",
+    data
+  );
+  return response.data;
+}
+
+export async function getPaoResponse(data: {
+  file_name: string;
+  user: string;
+  file_id: string;
+  body: string;
+}) {
+  const response = await paoApi.post<GetPaoResponseData>(
+    "studdiebuddie-hay-eye/get-response",
+    data
+  );
+  return response.data;
 }
 
 // export async function userName(data: userData): Promise<any> {

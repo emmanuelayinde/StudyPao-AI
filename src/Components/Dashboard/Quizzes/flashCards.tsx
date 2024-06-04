@@ -1,7 +1,38 @@
 import { useState } from "react";
+import { flashCardData } from "../../../data";
+
+interface data {
+  question: string;
+  answer: string;
+  question_num: number;
+}
 
 const FlashCards = () => {
+  const currCard: data[] = flashCardData.questions;
+
   const [showCards, setShowCards] = useState<boolean>(false);
+  const [cardNumber, setCardNumber] = useState<number>(0);
+  const [showAnswer, setShowAnswer] = useState<boolean>(false);
+  const [questionLeft, setQuestionLeft] = useState<number>(currCard.length);
+
+  const handleClick = () => {
+    setShowAnswer(true);
+
+    if (showAnswer) {
+      if (cardNumber < questionLeft - 1) {
+        setCardNumber((prevState) => {
+          return prevState + 1;
+        });
+      }
+      setQuestionLeft((prevState) => {
+        return prevState - 1;
+      });
+      if(questionLeft <= 0) {
+        setQuestionLeft(0)
+      }
+      setShowAnswer(false);
+    }
+  };
 
   return (
     <div className="px-5 h-screen">
@@ -17,24 +48,39 @@ const FlashCards = () => {
 
         <div className="my-10">
           {showCards && (
-            <div className="my-6 border py-[70px] rounded-md border-[#E2E4E2] lg:w-full xl:w-[500px] mx-auto px-5 text-center">
-              <p>
-                What is the difference between the MOVSX and MOVZX instructions
-                in the x86 instruction set?
-              </p>
+            <div>
+              <div className=" border py-[70px] rounded-t-md border-[#E2E4E2] lg:w-full xl:w-[500px] mx-auto px-5 text-center">
+                <p>{currCard[cardNumber].question}</p>
+              </div>
+
+              {showAnswer && (
+                <div className="bg-[#05B105] lg:w-full xl:w-[500px] mx-auto px-5 py-5 rounded-b-md">
+                  <p className="text-white">{currCard[cardNumber].answer}</p>
+                </div>
+              )}
             </div>
           )}
 
-          <div className="flex justify-center items-center gap-5">
+          <div className="flex justify-center items-center gap-5 my-6">
             <button className="text-white py-6 rounded-md w-[180px] bg-black">
-              20 left
+              {questionLeft} left
             </button>
-            <button
-              className="border rounded-md py-2 px-6"
-              onClick={() => setShowCards(true)}
-            >
-              Draw Question
-            </button>
+            {showCards ? (
+              <button
+                className="border rounded-md py-2 px-6"
+                onClick={handleClick}
+                // disabled={cardNumber >= questionLeft - 1}
+              >
+                {showAnswer ? "Next Question" : "Show Answer"}
+              </button>
+            ) : (
+              <button
+                className="border rounded-md py-2 px-6"
+                onClick={() => setShowCards(true)}
+              >
+                Draw Question
+              </button>
+            )}
           </div>
         </div>
       </div>

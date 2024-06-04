@@ -1,9 +1,9 @@
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 // import pdfFile from "../../../../public/Files/EEE_303_18_19_session.pdf";
-import { fileStore } from "../../../store";
+import { useFileStore } from "../../../store";
 
 const DocPreview = () => {
-  const file = fileStore((state) => state.file);
+  const file = useFileStore((state) => state.file);
   console.log(file);
   //   console.log(file);
 

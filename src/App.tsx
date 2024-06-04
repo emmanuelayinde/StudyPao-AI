@@ -16,6 +16,7 @@ import Cards from "./pages/Board/Quizz/cards";
 import Theories from "./pages/Board/Quizz/theories";
 import Ftg from "./pages/Board/Quizz/ftg";
 import TOrF from "./pages/Board/Quizz/tOrF";
+import ItemCategory from "./pages/Board/Category/itemCategory";
 
 function App() {
   const router = createBrowserRouter([
@@ -50,6 +51,10 @@ function App() {
         {
           path: "category",
           element: <Category />,
+        },
+        {
+          path: 'category/:categoryId',
+          element: <ItemCategory />
         },
         {
           path: "category/pao",

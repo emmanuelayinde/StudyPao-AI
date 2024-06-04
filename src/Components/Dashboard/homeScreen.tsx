@@ -1,19 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
-import { planStore, authTokenStores, authTokenStore } from "../../store";
-import { getUpgradePlan } from "../../../api";
+import { planStore, useUserInfoStore, authTokenStore } from "../../store";
+import { getUpgradePlan, useGetProfile } from "../../../api";
 import CreateCategory from "./createCategory";
 // import { useUpgradePlan } from "../../api/hooks";
 
 const HomeScreen = () => {
   const [showPlan, setShowPlan] = useState<boolean>(false);
   const [showCreateCategory, setShowCreateCategory] = useState<boolean>(false);
+  const [isPremium, setIsPremium] = useState<boolean>(false);
   // const firstName = authTokenStore((state) => state.firstName)
   const planType = planStore((state) => state.plan);
-  console.log(planType)
+  // console.log(planType);
+  const token = authTokenStore((state) => state.token);
+
   const handleClick = () => {
     if (planType === "free") {
       setShowPlan(true);
@@ -22,15 +25,39 @@ const HomeScreen = () => {
     }
   };
   // const firstName = localStorage.getItem("firstName");
-  const otherName = authTokenStores((state) => state.firstNames);
+  const otherName = useUserInfoStore((state) => state.firstNames);
   // const token = authTokenStore((state) => state.token);
   // console.log(token);
 
+  const getProfile = async () => {
+    try {
+      const res = await fetch(`${useGetProfile}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const report = await res.json();
+      planStore.setState({ plan: report.plan });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (isPremium) {
+      getProfile();
+    }
+  }, [isPremium]);
+
   return (
     <div className="">
-      {showPlan && <Subscription setShowPlan={setShowPlan} />}
+      {showPlan && <Subscription setShowPlan={setShowPlan} setIsPremium={setIsPremium}/>}
       {showCreateCategory && (
-        <CreateCategory setShowCreateCategory={setShowCreateCategory} />
+        <CreateCategory
+          setShowCreateCategory={setShowCreateCategory}
+        />
       )}
       <div className="py-[100px] px-5 h-[100vh]">
         <h1 className="text-4xl text-green font-bold md:w-[550px] w-full md:mx-auto  ">
@@ -76,12 +103,16 @@ const HomeScreen = () => {
 
 const Subscription = ({
   setShowPlan,
+  setIsPremium
 }: {
   setShowPlan: (newValue: boolean) => void;
+  setIsPremium: (newValue: boolean) => void;
 }) => {
   // const {mutateAsync} = useUpgradePlan();
   const token = authTokenStore((state) => state.token);
   // console.log(token);
+
+  // const navigate = useNavigate();
 
   const handleClick = async () => {
     try {
@@ -96,8 +127,10 @@ const Subscription = ({
       if (!res.ok) {
         alert("Big Fat Error");
       } else {
-        alert("Good to go");
-        // navigate("/dashboard")
+        setShowPlan(false);
+        setIsPremium(true)
+        // alert("Good to go");
+        // navigate("category")
       }
     } catch (error) {
       console.log(error);

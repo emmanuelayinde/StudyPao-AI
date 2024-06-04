@@ -1,6 +1,17 @@
-import { createMutation } from "react-query-kit";
-import { signUp, signIn, premiumPlan, createCategory, uploadFile } from "..";
+import { createMutation ,router } from "react-query-kit";
+import {
+  signUp,
+  signIn,
+  premiumPlan,
+  createCategory,
+  uploadFile,
+  getChat,
+  getWelcomeText,
+  preProcessFile,
+  getPaoResponse,
+} from "..";
 import { setTokens } from "../../utils";
+// import { AxiosError } from "axios";
 
 export const useSignup = createMutation({
   mutationFn: signUp,
@@ -23,16 +34,41 @@ export const useSignin = createMutation({
 });
 
 export const useUpgradePlan = createMutation({
-  mutationFn: premiumPlan
-})
+  mutationFn: premiumPlan,
+});
 
 export const useCreateCategory = createMutation({
   mutationFn: createCategory,
-})
+});
 
 export const useUploadFile = createMutation({
-  mutationFn: uploadFile
+  mutationFn: uploadFile,
+});
+
+export const useGetChat = createMutation({
+  mutationFn: getChat,
+});
+
+export const chatRouter= router("chat",{
+  getRecent: router.query({
+    fetcher: getChat
+  }),
+  getWelcomeMessage: router.query({
+    fetcher: getWelcomeText
+  })
 })
+
+export const useWelcomeText = createMutation({
+  mutationFn: getWelcomeText,
+});
+
+export const useProcessFile = createMutation({
+  mutationFn: preProcessFile,
+});
+
+export const useGetResponse = createMutation({
+  mutationFn: getPaoResponse,
+});
 
 // export const getUserInfo = createMutation({
 //     mutationFn: userName,

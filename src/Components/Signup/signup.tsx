@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { useState, useEffect } from "react";
 import { useSignup } from "../../api/hooks";
-import { authTokenStore, authTokenStores } from "../../store";
+import { authTokenStore, useUserInfoStore } from "../../store";
 import { motion, AnimatePresence } from "framer-motion";
 import { setUserDetail } from "../../utils";
 
@@ -21,7 +21,7 @@ const Signup = ({
   const [userExistError, setUserExistError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const setFirstName = authTokenStores.setState;
+  const setFirstName = useUserInfoStore.setState;
 
   const { mutateAsync } = useSignup();
 
@@ -39,7 +39,7 @@ const Signup = ({
             token: res.token,
             firstName: res.firstName,
           });
-          setFirstName({ firstNames: res.firstName });
+          setFirstName({ firstNames: res.firstName, initials: res.logo, tokens: res.token });
           setUserDetail(res.firstName);
         }
       })

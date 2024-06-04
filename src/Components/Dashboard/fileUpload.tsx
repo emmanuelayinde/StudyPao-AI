@@ -4,26 +4,33 @@ import {
   faCircleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { faFilePdf } from "@fortawesome/free-regular-svg-icons";
-import { faXmark, faCircleCheck} from "@fortawesome/free-solid-svg-icons";
+import { faXmark, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { useState, ChangeEvent, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { fileStore } from "../../store";
-import { useUploadFile } from "../../api/hooks";
+import { useNavigate } from "react-router-dom";
+import { useFileStore } from "../../store";
+import { useUploadFile, useProcessFile } from "../../api/hooks";
 import { motion, AnimatePresence } from "framer-motion";
 
 const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [processLoading, setProcessLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [startPreProcess, setStartPreProcess] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
+  const [fileResponse, setFileResponse] = useState<any>(null);
+
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
       setSelectedFile(files[0]);
-      fileStore.setState({ file: files[0] });
+      useFileStore.setState({ file: files[0] });
     }
   };
+  // const fileUrl = fileStore((state) => state.fileUrl)
+  // console.log(fileUrl)
 
   const { mutateAsync } = useUploadFile();
   const formData = new FormData();
@@ -35,8 +42,17 @@ const FileUpload = () => {
     setIsLoading(true);
     if (selectedFile) {
       mutateAsync(formData)
-        .then(() => {
+        .then((res) => {
+          // console.log(res);
+          setFileResponse(res);
+          useFileStore.setState({
+            fileId: res._id,
+            fileUrl: res.url,
+            user: res.user._id,
+            fileName: res.name,
+          });
           setIsSuccess(true);
+          setStartPreProcess(true);
           setIsLoading(false);
         })
         .catch((e) => {
@@ -64,6 +80,30 @@ const FileUpload = () => {
     }
   });
 
+  const { mutateAsync: mutateProcessFile } = useProcessFile();
+
+  const handleClick = () => {
+    setProcessLoading(true);
+    if (startPreProcess && fileResponse) {
+      mutateProcessFile({
+        file_name: fileResponse.name,
+        user: fileResponse.user._id,
+        url: fileResponse.url,
+        file_id: fileResponse._id,
+        type: "pdf",
+      })
+        .then(() => {
+          // console.log(res);
+          setProcessLoading(false);
+          navigate("/dashboard/category");
+        })
+        .catch((e) => {
+          console.log(e);
+          setProcessLoading(false);
+        });
+    }
+  };
+
   const flyVariant = {
     hidden: {
       x: "-100vw",
@@ -80,6 +120,15 @@ const FileUpload = () => {
 
   return (
     <div>
+      {processLoading && (
+        <div className="h-full w-full fixed top-0 z-[1000] bg-black/30">
+          <div className="text-center my-[200px]">
+            <div className="loading-spinner"></div>
+            <span className="text-white font-semibold my-6 ">This may take a while...</span>
+          </div>
+        </div>
+      )}
+
       <AnimatePresence>
         {isSuccess && (
           <motion.div
@@ -133,6 +182,7 @@ const FileUpload = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
       <div className="py-[100px] px-5 h-[100vh]">
         <h1 className="text-4xl font-bold md:w-[550px] md:mx-auto">
           Upload File
@@ -183,11 +233,14 @@ const FileUpload = () => {
                 <div>{isLoading && <div className="orange-spinner"></div>}</div>
               </div>
               <div className="md:w-[550px] mx-auto">
-                <Link to="/dashboard/category">
-                  <button className="my-5 text-white bg-orange rounded-lg w-[180px] py-2">
-                    Continue
-                  </button>
-                </Link>
+                {/* <Link to="/dashboard/category"> */}
+                <button
+                  className="my-5 text-white bg-orange rounded-lg w-[180px] py-2"
+                  onClick={handleClick}
+                >
+                  {startPreProcess ? "Pre-process file" : "Continue"}
+                </button>
+                {/* </Link> */}
               </div>
             </div>
           )}

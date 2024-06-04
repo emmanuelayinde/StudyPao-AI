@@ -3,6 +3,10 @@ import { persist } from "zustand/middleware";
 
 interface FileState {
   file: any;
+  fileId: string;
+  fileUrl: string;
+  user: string;
+  fileName: string;
 }
 
 interface AuthState {
@@ -22,7 +26,7 @@ export const authTokenStore = create(() => ({
   firstName: "",
 }));
 
-export const authTokenStores = create<AuthState>()(
+export const useUserInfoStore = create<AuthState>()(
   persist(
     (set) => ({
       ...initialState,
@@ -36,9 +40,24 @@ export const authTokenStores = create<AuthState>()(
   )
 );
 
-export const fileStore = create<FileState>(() => ({
-  file: null,
-}));
+// export const fileStore = create<FileState>(() => ({
+//   file: null,
+// }));
+
+export const useFileStore = create<FileState>()(
+  persist(
+    () => ({
+      file: null,
+      fileId: '',
+      fileUrl: '',
+      user: '',
+      fileName: ''
+    }),
+    {
+      name: 'file'
+    }
+  )
+)
 
 export const planStore = create(
   persist(
@@ -50,3 +69,4 @@ export const planStore = create(
     }
   )
 );
+

@@ -5,16 +5,43 @@ import {
   faBarsStaggered,
   faFileArrowUp,
   faXmark,
+  faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { authTokenStores } from "../../store";
+import { useUserInfoStore } from "../../store";
+import { useGetCategory } from "../../../api";
+import { Link } from "react-router-dom";
+
+interface Category {
+  name: string;
+  description: string;
+  _id: string;
+}
 
 const Sidebar = () => {
   const [collapse, setCollapse] = useState<boolean>(false);
   const [showSideBar, setShowSideBar] = useState<boolean>(false);
+  const [categories, setCategories] = useState([]);
 
-  const logo = authTokenStores((state) => state.initials)
+  const logo = useUserInfoStore((state) => state.initials);
+  const token = useUserInfoStore((state) => state.tokens);
+
+  const getCategory = async () => {
+    const res = await fetch(`${useGetCategory}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const report = await res.json();
+    setCategories(report);
+  };
+
+  useEffect(() => {
+    getCategory();
+  }, []);
 
   const collapseVariant = {
     hidden: {
@@ -104,7 +131,7 @@ const Sidebar = () => {
             >
               <div>
                 <span className=" text-white bg-black px-2 py-2 rounded-[50%] font-bold">
-                 {logo}
+                  {logo}
                 </span>
               </div>
 
@@ -147,6 +174,16 @@ const Sidebar = () => {
                     <FontAwesomeIcon icon={faPlusCircle} />
                     <span>Create New Category</span>
                   </button>
+
+                  {categories.map((item: Category) => {
+                    return (
+                      <div>
+                        <Link to={`/dashboard/category/${item._id}`}><button className="text-[#212321] text-sm">
+                          <FontAwesomeIcon icon={faBookOpen} /> {item.name}
+                        </button></Link>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {/* Sidebar Footer */}
