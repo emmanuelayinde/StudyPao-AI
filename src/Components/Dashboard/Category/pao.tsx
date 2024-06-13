@@ -92,10 +92,10 @@ const Pao = () => {
           </span>
         </div>
 
-        <div className="bg-white w-full md:w-[90%] h-full mx-auto rounded-2xl py-16 px-10 md:px-16 my-10 overflow-y-scroll">
+        <div className="bg-white w-full md:w-[90%] h-full mx-auto rounded-2xl py-16 px-5 lg:px-16 my-10 overflow-y-scroll">
           {newMessage && <WelcomePrompt {...{ fileId, fileName, fileUser,sendMessage }} />}
         <ChatInterface data={recentChats}/>
-        <ChatFooter {...{handleSubmit}}/>
+        <ChatFooter {...{handleSubmit}} initials={initials}/>
         </div>
       </div>
     </div>
@@ -129,13 +129,13 @@ const ChatCard= ({message,type,logo}:Chat)=>{
     </div>
   )
 }
-const ChatFooter=({handleSubmit}:{handleSubmit:React.FormEventHandler<HTMLFormElement>})=>{
+const ChatFooter=({handleSubmit, initials}:{handleSubmit:React.FormEventHandler<HTMLFormElement>; initials: string})=>{
   return(
     <div className="fixed bottom-0 ">
     <div className="flex items-center gap-4 py-5 bg-white">
       <div>
         <span className=" text-white bg-black px-2 py-2 rounded-[50%] font-bold">
-          AO
+          {initials}
         </span>
       </div>
       <div className="flex gap-3 items-center border border-[#E2E4E2] rounded-lg py-2 px-4 w-[]">
@@ -196,7 +196,7 @@ const WelcomePrompt = ({
           </p>
         </div>
 
-        <div className="flex items-center justify-between gap-8 my-10 px-[50px]">
+        <div className="flex flex-col  lg:flex-row items-center justify-between gap-8 my-10 md:px-[50px]">
           {welcomeMessage.prompts.slice(0, 3).map((prompt) => (
             <button onClick={()=>sendMessage(prompt)} className="bg-[#FAF4EB] flex-1 px-5 py-8 rounded-md">
               <p className="text-xs">{prompt}</p>

@@ -17,6 +17,8 @@ const CreateCategory = ({
     description: "",
   });
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -25,13 +27,14 @@ const CreateCategory = ({
     setCategory({ ...category, [name]: value });
   };
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { mutateAsync } = useCreateCategory();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (category.name && category.description) {
+      setIsLoading(true);
       mutateAsync({
         name: category.name,
         description: category.description,
@@ -40,10 +43,12 @@ const CreateCategory = ({
           if (!res) {
             // console.log(res);
             // alert("Nicee");
-            navigate("category")
+            setIsLoading(false);
+            navigate("category");
           }
         })
         .catch((e) => {
+          setIsLoading(false);
           console.log(e);
           alert("Big Fat Error");
         });
@@ -54,6 +59,13 @@ const CreateCategory = ({
 
   return (
     <div className="bg-black/30 w-full h-full fixed top-0">
+      {isLoading && (
+        <div className="h-full w-full fixed top-0 z-[1000] bg-black/30">
+          <div className="text-center my-[200px]">
+            <div className="loading-spinner"></div>
+          </div>
+        </div>
+      )}
       <div className="bg-white w-[95%] md:w-[450px] rounded-md  mx-auto my-[150px] px-4 py-5">
         <div className="text-right my-3">
           <FontAwesomeIcon

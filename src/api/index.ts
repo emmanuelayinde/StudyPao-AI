@@ -93,8 +93,17 @@ export async function uploadFile(data: any): Promise<any> {
   return response.data;
 }
 
-export async function preProcessFile(data: any): Promise<any> {
-  const response = await api.post("user/pre-process-file", data);
+export async function preProcessFile(data: {
+  user: string;
+  file_name: string;
+  url: string;
+  file_id: string;
+  type: string;
+}): Promise<any> {
+  const response = await paoApi.post(
+    "studdiebuddie-hay-eye/pre-process-file",
+    data
+  );
   return response.data;
 }
 

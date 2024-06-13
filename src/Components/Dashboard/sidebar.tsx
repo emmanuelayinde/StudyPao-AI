@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useUserInfoStore } from "../../store";
+import { useUserInfoStore, planStore } from "../../store";
 import { useGetCategory } from "../../../api";
 import { Link } from "react-router-dom";
 
@@ -23,9 +23,11 @@ const Sidebar = () => {
   const [collapse, setCollapse] = useState<boolean>(false);
   const [showSideBar, setShowSideBar] = useState<boolean>(false);
   const [categories, setCategories] = useState([]);
+  // console.log(categories);
 
   const logo = useUserInfoStore((state) => state.initials);
   const token = useUserInfoStore((state) => state.tokens);
+  const planType = planStore((state) => state.plan);
 
   const getCategory = async () => {
     const res = await fetch(`${useGetCategory}`, {
@@ -40,7 +42,9 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    getCategory();
+    if (planType !== "free") {
+      getCategory();
+    } 
   }, []);
 
   const collapseVariant = {
@@ -178,9 +182,11 @@ const Sidebar = () => {
                   {categories.map((item: Category) => {
                     return (
                       <div>
-                        <Link to={`/dashboard/category/${item._id}`}><button className="text-[#212321] text-sm">
-                          <FontAwesomeIcon icon={faBookOpen} /> {item.name}
-                        </button></Link>
+                        <Link to={`/dashboard/category/${item._id}`}>
+                          <button className="text-[#212321] text-sm">
+                            <FontAwesomeIcon icon={faBookOpen} /> {item.name}
+                          </button>
+                        </Link>
                       </div>
                     );
                   })}

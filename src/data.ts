@@ -44,3 +44,83 @@ export const flashCardData = {
   name: "4 Flash Cards (Pg1-Pg2)",
   createdAt: "2024-05-25T17:12:39.845+00:00",
 };
+
+export const mcq = {
+  _id: {
+    $oid: "6637da29f5ebc00de13391ba",
+  },
+  user: {
+    $oid: "661357c967533ace5491526a",
+  },
+  isSaved: true,
+  type: "mcq",
+  questions: [
+    {
+      question_num: 1,
+      question: "What is the current position of Isaac Oreoluwa?",
+      options: {
+        A: "Software Engineer at Etranzact",
+        B: "Backend Developer / Machine Learning Engineer at Lost in A City",
+        C: "Machine Learning(Computer Vision) Engineer at RectLabs",
+        D: "Artificial Intelligence Engineer at AB InBev",
+        E: "NONE",
+      },
+      answer: "D",
+    },
+    {
+      question_num: 2,
+      question:
+        "What programming languages does Isaac Oreoluwa have prior experience with?",
+      options: {
+        A: "Python and TypeScript",
+        B: "JavaScript and C++",
+        C: "C and C++",
+        D: "Python and JavaScript",
+        E: "ALL OF THE ABOVE",
+      },
+      answer: "C",
+    },
+    {
+      question_num: 3,
+      question: "What project did Isaac Oreoluwa lead at Etranzact?",
+      options: {
+        A: "Building a recommender system for the products of the company",
+        B: "Building a CRM TOOL from scratch",
+        C: "Implementing face detection as an additional layer of authentication",
+        D: "Development and deployment of an in-house recommendation system",
+        E: "NONE",
+      },
+      answer: "B",
+    },
+    {
+      question_num: 4,
+      question: "What is the role of the individual in the context provided?",
+      options: {
+        A: "Data Scientist",
+        B: "Machine Learning Engineer",
+        C: "Community Lead",
+        D: "Deep Learning Specialist",
+        E: "NONE",
+      },
+      answer: "C",
+    },
+    {
+      question_num: 5,
+      question: "Which topics are tutored by the individual?",
+      options: {
+        A: "Data Science",
+        B: "Machine Learning",
+        C: "Deep Learning",
+        D: "Artificial Intelligence",
+        E: "ALL OF THE ABOVE",
+      },
+      answer: "E",
+    },
+  ],
+  file_id: {
+    $oid: "6628cf92c359758220538f1d",
+  },
+  recent_name: "5 MCQs",
+  name: "5 MCQs (Pg1-Pg2)",
+  createdAt: "2024-05-05T19:12:41.979+00:00",
+};
