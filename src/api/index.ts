@@ -56,11 +56,12 @@ const paoApi = axios.create({
   baseURL: FAST_API,
 });
 
-export async function getRefreshToken() {
-  const tokens = getTokens();
+export async function getRefreshToken(rToken?: string | any) {
+  let token = rToken || getTokens();
+  console.log(token, token.refreshToken);
   const response = await api.get("user/refresh-token", {
     headers: {
-      Authorization: `Bearer ${tokens.refreshToken}`,
+      Authorization: `Bearer ${token?.refreshToken}`,
     },
   });
   return response.data;

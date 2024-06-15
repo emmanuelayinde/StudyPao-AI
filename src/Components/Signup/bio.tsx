@@ -7,6 +7,7 @@ import {
 } from "../../../api";
 import { authTokenStore } from "../../store";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface College {
   name: string;
@@ -24,9 +25,10 @@ const Bio = () => {
   const [getCollege, setGetCollege] = useState("");
   const [getCollegeArray, setGetCollegeArray] = useState([]);
   const [authError, setAuthError] = useState(false);
+  const [department, setDepartment] = useState("");
 
   const token = authTokenStore((state) => state.token);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleClick = () => {
     if (getCollege) {
@@ -84,19 +86,20 @@ const Bio = () => {
           lastName: userInfo.lastName,
           level: getCurrLevel,
           universityName: getCollege,
+          department,
         }),
       });
 
-      if(!res.ok) {
-        alert('Big Fat Error')
+      if (!res.ok) {
+        toast.error(res.statusText || "Updating user profile failed!");
       } else {
-        alert('Good to go')
-        navigate("/dashboard")
+        toast.success(res.statusText || "Signup completed successfully!");
+        navigate("/dashboard");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      toast.error("An error occurred, try again!");
     }
-
   };
 
   useEffect(() => {
@@ -132,7 +135,19 @@ const Bio = () => {
                 </div>
               </div>
             </div>
+            <div>
+              <label htmlFor="">Department</label>
 
+              <div>
+                <input
+                  type="text"
+                  className="border border-[#E7E9ED] rounded-md w-full py-[12px] px-3"
+                  defaultValue={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                />
+                <span className="text-sm text-[#A3A9A3]">First</span>
+              </div>
+            </div>
             <div className="my-5">
               <label htmlFor="">What is your level?</label>
               <select

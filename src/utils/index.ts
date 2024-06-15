@@ -1,5 +1,7 @@
 // import { queryClient } from "../main";
 
+import { setCookie } from "./cookie.util";
+
 const STORE_KEY = "STORE_KEY";
 const USER_KEY = "firstName";
 
@@ -9,6 +11,9 @@ export const getTokens = (): any => {
 };
 
 export const setTokens = (token: any): void => {
+  setCookie("accessToken", token.token, 1);
+  setCookie("refreshToken", token.refreshToken, 7);
+  // TODO: This should be removed 👇
   localStorage.setItem(STORE_KEY, JSON.stringify(token));
 };
 
@@ -25,7 +30,6 @@ export const setUserDetail = (name: string) => {
 };
 
 export const getUserDetail = () => {
-  const userName: string = localStorage.getItem(USER_KEY) || "" ;
-  return userName
-}
-
+  const userName: string = localStorage.getItem(USER_KEY) || "";
+  return userName;
+};

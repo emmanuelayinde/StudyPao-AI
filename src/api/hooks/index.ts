@@ -1,4 +1,4 @@
-import { createMutation ,router } from "react-query-kit";
+import { createMutation, router } from "react-query-kit";
 import {
   signUp,
   signIn,
@@ -9,6 +9,7 @@ import {
   getWelcomeText,
   preProcessFile,
   getPaoResponse,
+  getRefreshToken,
 } from "..";
 import { setTokens } from "../../utils";
 // import { AxiosError } from "axios";
@@ -33,6 +34,16 @@ export const useSignin = createMutation({
   },
 });
 
+export const useRefreshToken = createMutation({
+  mutationFn: getRefreshToken,
+  onSuccess: (data) => {
+    setTokens({
+      token: data.token,
+      refreshToken: data.refreshToken,
+    });
+  },
+});
+
 export const useUpgradePlan = createMutation({
   mutationFn: premiumPlan,
 });
@@ -49,14 +60,14 @@ export const useGetChat = createMutation({
   mutationFn: getChat,
 });
 
-export const chatRouter= router("chat",{
+export const chatRouter = router("chat", {
   getRecent: router.query({
-    fetcher: getChat
+    fetcher: getChat,
   }),
   getWelcomeMessage: router.query({
-    fetcher: getWelcomeText
-  })
-})
+    fetcher: getWelcomeText,
+  }),
+});
 
 export const useWelcomeText = createMutation({
   mutationFn: getWelcomeText,
