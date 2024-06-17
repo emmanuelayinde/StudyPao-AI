@@ -10,8 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { useFileStore } from "../../store";
 import { useUploadFile, useProcessFile } from "../../api/hooks";
 import { motion, AnimatePresence } from "framer-motion";
-import { AxiosProgressEvent } from "axios";
-import useFileUpload from "../../api/hooks/useFileUpload";
 
 const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -22,11 +20,8 @@ const FileUpload = () => {
   const [isError, setIsError] = useState<boolean>(false);
   const [fileResponse, setFileResponse] = useState<any>(null);
 
-  const [uploadProgress, setUploadProgress] = useState(0);
+  const navigate = useNavigate();
 
-  // const navigate = useNavigate();
-
-  //
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
@@ -34,30 +29,21 @@ const FileUpload = () => {
       useFileStore.setState({ file: files[0] });
     }
   };
+  // const fileUrl = fileStore((state) => state.fileUrl)
+  // console.log(fileUrl)
 
-  const { mutateAsync: mutateFileUpload } = useFileUpload();
-
-  //
+  const { mutateAsync } = useUploadFile();
   const formData = new FormData();
   if (selectedFile) {
     formData.append("file", selectedFile);
   }
 
-  //
-  const onUploadProgress = (progressEvent: AxiosProgressEvent) => {
-    const progress = Math.round(
-      (progressEvent.loaded * 100) / progressEvent.total!
-    );
-    setUploadProgress(progress);
-  };
-
-  //
   useEffect(() => {
     setIsLoading(true);
     if (selectedFile) {
-      mutateFileUpload({ file: formData, onUploadProgress })
+      mutateAsync(formData)
         .then((res) => {
-          console.log({ res });
+          // console.log(res);
           setFileResponse(res);
           useFileStore.setState({
             fileId: res._id,
@@ -76,12 +62,23 @@ const FileUpload = () => {
             setIsError(true);
           }
           // console.log(e);
-        })
-        .finally(() => {
-          setUploadProgress(0);
         });
     }
   }, [selectedFile]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout(() => {
+        setIsSuccess(false);
+      }, 3000);
+    }
+
+    if (isError) {
+      setTimeout(() => {
+        setIsError(false);
+      }, 3000);
+    }
+  });
 
   const { mutateAsync: mutateProcessFile } = useProcessFile();
 
@@ -98,7 +95,7 @@ const FileUpload = () => {
         .then(() => {
           // console.log(res);
           setProcessLoading(false);
-          // navigate("/dashboard/category");
+          navigate("/dashboard/category");
         })
         .catch((e) => {
           console.log(e);
@@ -127,9 +124,7 @@ const FileUpload = () => {
         <div className="h-full w-full fixed top-0 z-[1000] bg-black/30">
           <div className="text-center my-[200px]">
             <div className="loading-spinner"></div>
-            <span className="text-white font-semibold my-6 ">
-              This may take a while...
-            </span>
+            <span className="text-white font-semibold my-6 ">This may take a while...</span>
           </div>
         </div>
       )}
@@ -216,8 +211,8 @@ const FileUpload = () => {
             className="text-xs text-[#B3A17E]"
           />
           <span className="text-xs text-[#B3A17E]">
-            Make sure the uploaded document is a selectable pdf, and not a
-            scanned image, pptx or docx
+            Make sure the uploaded document text is selectable, and not a
+            scanned image.
           </span>
         </div>
 
@@ -225,24 +220,14 @@ const FileUpload = () => {
           {selectedFile && (
             <div>
               <div className="flex items-center md:w-[550px] gap-5 justify-center mx-auto">
-                <div
-                  className={` flex items-center px-4 py-5 rounded-lg gap-5 w-full mx-auto shadow-md transition duration-300`}
-                  style={{
-                    background: `linear-gradient(to right, #ef9f01 ${uploadProgress}%, #fff ${uploadProgress}%)`,
-                  }}
-                >
+                <div className="bg-white flex items-center px-4 py-5 rounded-lg gap-5 w-full mx-auto shadow-md">
                   <FontAwesomeIcon
                     icon={faFilePdf}
-                    className={isLoading ? "text-[#bcbcbc]" : "text-white"}
+                    className={isLoading ? "text-[#bcbcbc]" : "text-black"}
                   />
-
-                  <p className={isLoading ? "text-[#bcbcbc]" : "text-white"}>
-                    {selectedFile.name.length > 35
-                      ? selectedFile.name.slice(0, 35) + "...pdf"
-                      : selectedFile.name}{" "}
-                    - {uploadProgress}%
+                  <p className={isLoading ? "text-[#bcbcbc]" : "text-black"}>
+                    {selectedFile.name}
                   </p>
-                  {/* </div> */}
                 </div>
 
                 <div>{isLoading && <div className="orange-spinner"></div>}</div>
@@ -253,11 +238,7 @@ const FileUpload = () => {
                   className="my-5 text-white bg-orange rounded-lg w-[180px] py-2"
                   onClick={handleClick}
                 >
-                  {processLoading
-                    ? "Processing file"
-                    : startPreProcess
-                    ? "Process file"
-                    : "Continue"}
+                  {startPreProcess ? "Pre-process file" : "Continue"}
                 </button>
                 {/* </Link> */}
               </div>

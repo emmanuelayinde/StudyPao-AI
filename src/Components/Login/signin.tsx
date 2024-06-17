@@ -30,16 +30,13 @@ const Signin = () => {
     })
       .then((res) => {
         if (res) {
+          // console.log(res)
           setIsLoading(false);
           authTokenStore.setState({
             firstName: res.firstName,
             token: res.token,
           });
-          setFirstName({
-            firstNames: res.firstName,
-            initials: res.logo,
-            tokens: res.token,
-          });
+          setFirstName({ firstNames: res.firstName, initials: res.logo, tokens: res.token });
           planStore.setState({ plan: res.plan });
           setUserDetail(res.firstName);
           navigate("/dashboard");

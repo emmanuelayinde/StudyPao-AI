@@ -1,13 +1,13 @@
-import Signin from "../Components/Login/signin";
-import Nav from "../Components/LandingPage/nav";
+import Signin from '../Components/Login/signin'
+import Nav from '../Components/LandingPage/nav'
 
 const Login = () => {
   return (
     <div>
-      <Nav />
+        <Nav />
       <Signin />
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

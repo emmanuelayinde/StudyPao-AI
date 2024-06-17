@@ -17,33 +17,20 @@ import Theories from "./pages/Board/Quizz/theories";
 import Ftg from "./pages/Board/Quizz/ftg";
 import TOrF from "./pages/Board/Quizz/tOrF";
 import ItemCategory from "./pages/Board/Category/itemCategory";
-import AuthRoute from "./utils/authRoute";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: (
-        <AuthRoute>
-          <Home />,
-        </AuthRoute>
-      ),
+      element: <Home />,
     },
     {
       path: "/signin",
-      element: (
-        <AuthRoute>
-          <Login />
-        </AuthRoute>
-      ),
+      element: <Login />,
     },
     {
       path: "/signup",
-      element: (
-        <AuthRoute>
-          <Register />
-        </AuthRoute>
-      ),
+      element: <Register />,
     },
     {
       path: "/dashboard",
@@ -66,8 +53,8 @@ function App() {
           element: <Category />,
         },
         {
-          path: "category/:categoryId",
-          element: <ItemCategory />,
+          path: 'category/:categoryId',
+          element: <ItemCategory />
         },
         {
           path: "category/pao",
@@ -79,28 +66,28 @@ function App() {
         },
         {
           path: "category/quizz/preview",
-          element: <PdfPreview />,
+          element: <PdfPreview />
         },
         {
           path: "category/quizz/mcq",
-          element: <Obj />,
+          element: <Obj />
         },
         {
           path: "category/quizz/flashcards",
-          element: <Cards />,
+          element: <Cards />
         },
         {
           path: "category/quizz/theory",
-          element: <Theories />,
+          element: <Theories />
         },
         {
           path: "category/quizz/fillinthegap",
-          element: <Ftg />,
+          element: <Ftg />
         },
         {
           path: "category/quizz/trueorfalse",
-          element: <TOrF />,
-        },
+          element: <TOrF />
+        }
       ],
     },
   ]);
