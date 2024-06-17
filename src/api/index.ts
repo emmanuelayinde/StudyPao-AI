@@ -47,20 +47,21 @@ export function tokenInterceptors() {
 }
 
 const BASE_URL = `${basic}`;
-const api = axios.create({
+export const api = axios.create({
   baseURL: BASE_URL,
 });
 
 const FAST_API = `${paoBasic}`;
-const paoApi = axios.create({
+export const paoApi = axios.create({
   baseURL: FAST_API,
 });
 
-export async function getRefreshToken() {
-  const tokens = getTokens();
+export async function getRefreshToken(rToken?: string | any) {
+  let token = rToken || getTokens();
+  console.log(token, token.refreshToken);
   const response = await api.get("user/refresh-token", {
     headers: {
-      Authorization: `Bearer ${tokens.refreshToken}`,
+      Authorization: `Bearer ${token?.refreshToken}`,
     },
   });
   return response.data;
@@ -89,7 +90,14 @@ export async function createCategory(data: any): Promise<any> {
 
 export async function uploadFile(data: any): Promise<any> {
   tokenInterceptors();
-  const response = await api.post("user/upload", data);
+  const response = await api.post("user/upload", data, {
+    // onUploadProgress(progressEvent) {
+    //   const progress = Math.round(
+    //     (progressEvent.loaded * 100) / progressEvent.total!
+    //   );
+    //   console.log({ progress });
+    // },
+  });
   return response.data;
 }
 
