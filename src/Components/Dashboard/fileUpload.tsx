@@ -6,9 +6,8 @@ import {
 import { faFilePdf } from "@fortawesome/free-regular-svg-icons";
 import { faXmark, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { useState, ChangeEvent, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useFileStore } from "../../store";
-import { useUploadFile, useProcessFile } from "../../api/hooks";
+import { useProcessFile } from "../../api/hooks";
 import { motion, AnimatePresence } from "framer-motion";
 import { AxiosProgressEvent } from "axios";
 import useFileUpload from "../../api/hooks/useFileUpload";
@@ -236,11 +235,21 @@ const FileUpload = () => {
                     className={isLoading ? "text-[#bcbcbc]" : "text-white"}
                   />
 
-                  <p className={isLoading ? "text-[#bcbcbc]" : "text-white"}>
-                    {selectedFile.name.length > 35
-                      ? selectedFile.name.slice(0, 35) + "...pdf"
-                      : selectedFile.name}{" "}
-                    - {uploadProgress}%
+                  <p
+                    className={`${isLoading ? "text-[#bcbcbc]" : "text-white"
+                      } w-full inline-flex justify-between items-center`}
+                  >
+                    <span className="w-full">
+                      {selectedFile.name.length > 35
+                        ? selectedFile.name.slice(0, 30) +
+                        "..." +
+                        selectedFile.name.substring(
+                          selectedFile.name.length - 7,
+                          selectedFile.name.length
+                        )
+                        : selectedFile.name}{" "}
+                    </span>
+                    <span>{uploadProgress}%</span>
                   </p>
                   {/* </div> */}
                 </div>
@@ -256,8 +265,8 @@ const FileUpload = () => {
                   {processLoading
                     ? "Processing file"
                     : startPreProcess
-                    ? "Process file"
-                    : "Continue"}
+                      ? "Process file"
+                      : "Continue"}
                 </button>
                 {/* </Link> */}
               </div>
